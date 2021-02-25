@@ -83,7 +83,8 @@ router.post(
             }
          )
       } catch(err) {
-         console.log(err.message);
+         //@BEFORE console.log(err.message)    (deleted);
+
          res.status(500).send("Server Error");
       }
    }
@@ -104,7 +105,9 @@ router.post(
       const { email, password } = req.body;
 
       try {
-         const user = await User.findOne({ where: {email: email} });
+         //@BEFORE  added spaces in the object
+         // const user = await User.findOne({ where: {email: email} });
+         const user = await User.findOne({ where: { email: email } });
 
          if(!user) {
             return res.status(401).json({ errors: [{ msg: "Userul nu este inregistrat" }]});
@@ -120,27 +123,40 @@ router.post(
                   }
                };
       
-               jwt.sign(payload, config.get("secret"),
-               { expiresIn: 36000 },
-               function(err, token) {
-                  if(err) throw err;
-                  res.json({token});
-               })
+               //@BEFORE rewritten with arrow function and if with brackets
+               // jwt.sign(payload, config.get("secret"),
+               // { expiresIn: 36000 },
+               // function(err, token) {
+               //    if(err) throw err;
+               //    res.json({token});
+               // })
+               jwt.sign(payload, config.get("secret"), { expiresIn: 36000 }, (err, token) => {
+                  if(err) {
+                     throw err;
+                  }
+                  res.json({ token });
+               });
+
             } else {
                res.status(400).send({ errors: [{ msg: "Parola este Gresita" }] });
             }
          });        
       } catch (error) {
-         console.log("err.message");
          res.status(500).send("Server Error");
       }
    }
 );
 
-router.get('/users', auth.isMP, async (req, res) => {
+//@BEFORE  renamed the middleware function
+// router.get('/users', auth.isMP, async (req, res) => {
+router.get('/users', auth.isProjectManager, async(req, res) => {
    try {
-      await User.findAll().then(els => {
-         res.status(200).json(els);
+      //@BEFORE renamed the response variable
+      // await User.findAll().then(els => {
+      //    res.status(200).json(els);
+      // }).catch(err => console.log(err));
+      await User.findAll().then(users => {
+         res.status(200).json(users);
       }).catch(err => console.log(err));
    } catch (error) {
       console.log(error);

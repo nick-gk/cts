@@ -1,8 +1,8 @@
 package ro.ase.acs.classes;
-
+import ro.ase.acs.interfaces.CarInterface;
 import ro.ase.acs.interfaces.Taxable;
 
-public final class Car extends Vehicle implements Taxable {
+public final class Car extends Vehicle implements Taxable, CarInterface {
     private String color;
     private int capacity;
 

@@ -1,6 +1,8 @@
 package ro.ase.acs.classes;
 
-public abstract class Vehicle implements Cloneable {
+import ro.ase.acs.interfaces.VehicleInterface;
+
+public abstract class Vehicle implements VehicleInterface, Cloneable {
     private String name;
     private int speed;
 
